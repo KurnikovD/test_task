@@ -9,20 +9,22 @@ app.get('/', (req, res) => {
 
 app.get('/check',(req, res) => {
     const name = req.query['username']
-    exec('net user | find " ' + name + '  " || echo 0', (error, stdout, stderr) => {
+    exec('net user ' + name + ' || echo 0', (error, stdout, stderr) => {
         if (error){
-            res.writeHeader(401, { 'Content-Type': 'text/html' });
+            res.writeHeader(401, { 'Content-Type': 'text/html' })
             res.write(
                 `<h3>Err, please try again!</h3>`
-            );
-            return;
+            )
+            res.send()
+            return
         }
         if (stderr) {
-            res.writeHeader(401, { 'Content-Type': 'text/html' });
+            res.writeHeader(401, { 'Content-Type': 'text/html' })
             res.write(
                 `<h3>Err, please try again!</h3>`
-            );
-            return;
+            )
+            res.send()
+            return
         }
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
         res.write(`<!DOCTYPE html>
