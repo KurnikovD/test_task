@@ -8,6 +8,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/check',(req, res) => {
+    const name = req.query['username']
     exec('net user | find " ' + name + '  " || echo 0', (error, stdout, stderr) => {
         if (error){
             res.writeHeader(401, { 'Content-Type': 'text/html' });
@@ -32,14 +33,13 @@ app.get('/check',(req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
         </head>
-        <body>
-        <form action="/" name="back"></form>`)
+        <body>`)
         if (stdout === '0\r\n'){
             res.write(`<label>Пользователя ${name} нет</label>`)
         }   else {
             res.write(`<label>Пользователя ${name} есть</label>`)
         }
-        res.write(`<br><button form="back">Назад</button>
+        res.write(`<br><a href="/"><button>Назад</button></a>
         </body>
         </html>`)
         res.send()
