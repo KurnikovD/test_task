@@ -9,23 +9,7 @@ app.get('/', (req, res) => {
 
 app.get('/check',(req, res) => {
     const name = req.query['username']
-    exec('net user ' + name + ' || echo 0', (error, stdout, stderr) => {
-        if (error){
-            res.writeHeader(401, { 'Content-Type': 'text/html' })
-            res.write(
-                `<h3>Err, please try again!</h3>`
-            )
-            res.send()
-            return
-        }
-        if (stderr) {
-            res.writeHeader(401, { 'Content-Type': 'text/html' })
-            res.write(
-                `<h3>Err, please try again!</h3>`
-            )
-            res.send()
-            return
-        }
+    exec('net user ' + name, (error) => {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
         res.write(`<!DOCTYPE html>
         <html lang="en">
@@ -36,7 +20,7 @@ app.get('/check',(req, res) => {
             <title>Document</title>
         </head>
         <body>`)
-        if (stdout === '0\r\n'){
+        if (error){
             res.write(`<label>Пользователя ${name} нет</label>`)
         }   else {
             res.write(`<label>Пользователя ${name} есть</label>`)
